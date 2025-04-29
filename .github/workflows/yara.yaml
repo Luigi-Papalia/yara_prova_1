@@ -1,0 +1,37 @@
+name: YARA Scan
+
+on:
+  repository_dispatch:
+    types: [yara]
+
+permissions:
+  contents: write
+  issues: write
+  security-events: write
+
+jobs:
+  yara-scan:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Install YARA
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y yara
+
+    - name: Clone YARA rules
+      run: |
+        git clone https://github.com/Yara-Rules/rules.git yara-rules
+
+    - name: Run YARA scan
+      run: |
+        yara -r yara-rules/ ./ > yara_scan_results.txt
+
+    - name: Upload YARA scan results
+      uses: actions/upload-artifact@v3
+      with:
+        name: yara-scan-results
+        path: yara_scan_results.txt
