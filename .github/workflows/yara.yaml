@@ -26,9 +26,14 @@ jobs:
       run: |
         git clone https://github.com/Yara-Rules/rules.git yara-rules
 
+    - name: Compile YARA rules
+      run: |
+        find yara-rules/ -name '*.yar' > rule_files.txt
+        yara -C -f rule_files.txt -o compiled_rules.yar
+    
     - name: Run YARA scan
       run: |
-        yara -r yara-rules/ ./ > yara_scan_results.txt
+        yara -r compiled_rules.yar ./ > yara_scan_results.txt
 
     - name: Upload YARA scan results
       uses: actions/upload-artifact@v4
