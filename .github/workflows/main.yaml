@@ -1,0 +1,14 @@
+name: Meta Security Pipeline
+
+on:
+  workflow_dispatch:
+
+jobs:
+  trigger-yara:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger YARA
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.REPO_ACCESS_TOKEN }}
+          event-type: yara
