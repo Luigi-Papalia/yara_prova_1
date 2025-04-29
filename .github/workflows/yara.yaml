@@ -31,7 +31,8 @@ jobs:
         yara -r yara-rules/ ./ > yara_scan_results.txt
 
     - name: Upload YARA scan results
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: yara-scan-results
         path: yara_scan_results.txt
+        include-hidden-files: true
